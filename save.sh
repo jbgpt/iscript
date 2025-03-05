@@ -1,3 +1,4 @@
+#结合ttydrun 一起使用于openwrt路由的ttyd
 #!/bin/sh
 LAST_DIR_FILE="/etc/last_dir"
 save_dir() {
