@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-#加入服务配置，sh脚本放在/usr/bin
+#加入服务配置，可选择，ttydrun.sh脚本要放在/usr/bin
 START=99，
 STOP=10
 
