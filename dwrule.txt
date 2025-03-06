@@ -1,3 +1,4 @@
 https://gh-proxy.com///https://raw.githubusercontent.com/Loyalsoldier/geoip/refs/heads/release/text/private.txt
 https://gh-proxy.com///https://raw.githubusercontent.com/Loyalsoldier/geoip/refs/heads/release/text/cloudflare.txt
 https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt
+https://raw.githubusercontent.com/pmkol/easymosdns/refs/heads/rules/ad_domain_list.txt
