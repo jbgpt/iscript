@@ -1,5 +1,5 @@
 #!/bin/sh
-
+#gfw 可更新于https://github.com/gfwlist/gfwlist/blob/master/gfwlist.txt
 # GitHub 仓库信息
 REPO_OWNER="jbgpt"
 REPO_NAME="mosdns-rule"
@@ -52,7 +52,7 @@ download_file() {
         exit 1
     fi
 }
-
+wget -O /etc/mosdns/rule/gfwlist.txt https://gh-proxy.com///https://raw.githubusercontent.com/gfwlist/gfwlist/refs/heads/master/gfwlist.txt
 # 下载所有配置文件
 for file in $FILES; do
     download_file $file
