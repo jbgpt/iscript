@@ -1,0 +1,2 @@
+https://gh-proxy.com///https://raw.githubusercontent.com/Loyalsoldier/geoip/refs/heads/release/text/private.txt
+https://gh-proxy.com///https://raw.githubusercontent.com/Loyalsoldier/geoip/refs/heads/release/text/cloudflare.txt
