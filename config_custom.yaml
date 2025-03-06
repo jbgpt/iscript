@@ -1,0 +1,185 @@
+log:
+  level: debug
+  file: ./mosdns.log
+
+api:
+  http: "0.0.0.0:8338"
+
+plugins:
+  - tag: hosts
+    type: hosts
+    args:
+      files: ./hosts.txt
+
+  - tag: cache
+    type: cache
+    args:
+      size: 512 # 调整缓存大小以适应路由器内存
+      lazy_cache_ttl: 86400
+
+  - tag: adlist
+    type: domain_set
+    args:
+      files: ./rules/ad_domain_list.txt
+
+  - tag: ad_serverlist
+    type: domain_set
+    args:
+      files: ./rules/serverlist.txt
+
+  - tag: local_ptr
+    type: domain_set
+    args:
+      files: ./rules/local-ptr.txt
+
+  - tag: china_domain
+    type: domain_set
+    args:
+      files: ./rules/china_domain_list.txt
+
+  - tag: cdncn_domain
+    type: domain_set
+    args:
+      files: ./rules/cdn_domain_list.txt
+
+  - tag: ecs_cn_domain
+    type: domain_set
+    args:
+      files: ./rules/ecs_cn_domain.txt
+
+  - tag: gfwlist
+    type: domain_set
+    args:
+      files: ./rules/gfw_domain_list.txt
+
+  - tag: geosite_no_cn
+    type: domain_set
+    args:
+      files: ./rules/geosite_no_cn.txt
+
+  - tag: local_ip
+    type: ip_set
+    args:
+      files: ./rules/china_ip_list.txt
+
+  - tag: gfw_ip
+    type: ip_set
+    args:
+      files: ./rules/gfw_ip_list.txt
+
+  - tag: ecs_tw
+    type: ecs_handler
+    args:
+      forward: false
+      preset: 168.95.1.0
+      send: false
+      mask4: 24
+      mask6: 48
+
+  - tag: rate_limit
+    type: rate_limiter
+    args:
+      qps: 20
+      burst: 40
+      mask4: 32
+      mask6: 48
+
+  - tag: forward_local
+    type: forward
+    args:
+      concurrent: 3
+      upstreams:
+        - addr: https://sm2.doh.pub/dns-query
+          dial_addr: 106.55.91.174:443
+        - addr: quic://223.5.5.5
+        - addr: 180.184.1.1
+
+  - tag: forward_remote
+    type: forward
+    args:
+      concurrent: 2
+      upstreams:
+        - addr: https://101.101.101.101/dns-query
+        - addr: https://doh.apad.pro/dns-query
+          bootstrap: 119.29.29.29
+
+  - tag: local_sequence
+    type: sequence
+    args:
+      - exec: $forward_local
+      - matches:
+        - "!resp_ip $local_ip"
+        exec: drop_resp
+
+  - tag: noleak_sequence
+    type: sequence
+    args:
+      - exec: prefer_ipv4
+      - exec: $ecs_tw
+      - exec: $forward_remote
+      - matches: "resp_ip $local_ip"
+        exec: $forward_local
+
+  - tag: remote_sequence
+    type: sequence
+    args:
+      - exec: prefer_ipv4
+      - exec: $ecs_tw
+      - exec: $forward_remote
+      - matches: "resp_ip $gfw_ip"
+        exec: drop_resp
+
+  - tag: has_wanted_ans_sequence
+    type: sequence
+    args:
+      - matches: has_wanted_ans
+        exec: accept
+
+  - tag: fallback
+    type: fallback
+    args:
+      primary: noleak_sequence
+      secondary: remote_sequence
+      threshold: 500
+      always_standby: false
+
+  - tag: main_sequence
+    type: sequence
+    args:
+      - matches: "!$rate_limit"
+        exec: reject 3
+
+      - exec: $hosts
+      - exec: jump has_wanted_ans_sequence
+
+      - matches: qtype 12 65 255
+        exec: reject 0
+
+      - matches:
+          - "!qname $adlist"
+          - "!qname $ad_serverlist"
+          - "!qname $local_ptr"
+        exec: $cache
+      - exec: jump has_wanted_ans_sequence
+
+      - matches: qname $china_domain $cdncn_domain $ecs_cn_domain
+        exec: $local_sequence
+      - exec: jump has_wanted_ans_sequence
+
+      - matches: qname $geosite_no_cn $gfwlist
+        exec: $remote_sequence
+      - exec: jump has_wanted_ans_sequence
+
+      - exec: $fallback
+
+  - tag: udp_server
+    type: udp_server
+    args:
+      entry: main_sequence
+      listen: 127.0.0.1:53
+
+  - tag: tcp_server
+    type: tcp_server
+    args:
+      entry: main_sequence
+      listen: 127.0.0.1:53
