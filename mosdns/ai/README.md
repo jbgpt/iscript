@@ -17,10 +17,10 @@ GFW列表：通过SSR Plus代理端口7913走加密查询14
 # 使用前需要：
 从 Loyalsoldier/geoip 和 v2fly/domain-list-community 获取最新geoip.dat/geosite.dat
 修改SSR Plus代理端口与实际配置一致（默认7913）
-建议配合以下防火墙规则：
+# 建议配合以下防火墙规则：
  
 ## 强制53端口流量转到mosdns 
-iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53 
-iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53 
+## iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53 
+## iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53 
  
-完整配置需要根据实际网络环境调整DNS服务器地址，可通过 dig twitter.com @127.0.0.1 测试分流效果，在query.log中查看具体解析路径14。
+## 完整配置需要根据实际网络环境调整DNS服务器地址，可通过 dig twitter.com @127.0.0.1 测试分流效果，在query.log中查看具体解析路径14。
