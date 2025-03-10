@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # 下载 geoip.dat 文件
-curl -o /path/to/local/geoip.dat https://example.com/geoip.dat
+curl -o /ver/mosdns/geoip.dat https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/geoip.dat
 
 # 下载 geosite.dat 文件
 curl -o /path/to/local/geosite.dat https://example.com/geosite.dat
