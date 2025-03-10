@@ -7,13 +7,13 @@
 3. GFW列表：通过SSR Plus代理端口7913走加密查询14
 4. 灰名单（被污染域名）：强制使用Cloudflare/Google的加密DNS解析9
 5. 抗污染措施
-6.对 .com/.net/.org 等非中国TLD域名强制使用DoT/DoH查询
-7.采用TCP协议传输避免DNS劫持
-8.设置缓存TTL防止中间人攻击2
-9.性能优化
-10.启用内存缓存加速重复查询（1小时TTL）
-11.使用fast_forward插件实现多DNS并行查询
-记录查询日志用于故障排查12
+6. 对 .com/.net/.org 等非中国TLD域名强制使用DoT/DoH查询
+7. 采用TCP协议传输避免DNS劫持
+8. 设置缓存TTL防止中间人攻击2
+9. 性能优化
+10. 启用内存缓存加速重复查询（1小时TTL）
+11. 使用fast_forward插件实现多DNS并行查询
+   记录查询日志用于故障排查12
 # 使用前需要：
 从 Loyalsoldier/geoip 和 v2fly/domain-list-community 获取最新geoip.dat/geosite.dat
 修改SSR Plus代理端口与实际配置一致（默认7913）
