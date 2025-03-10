@@ -4,7 +4,7 @@ touch /var/mosdns/query.log
 curl -o /var/mosdns/geoip.dat https://gh-proxy.com///https://raw.githubusercontent.com/Loyalsoldier/geoip/release/geoip.dat
 
 # 下载 geosite.dat 文件
-curl -o /var/mosdns/geosite.dat https://gh-proxy.com///https://github.com/Loyalsoldier/domain-list-custom/releases/latest/downhttps://gh-proxy.com///https://github.com/Loyalsoldier/domain-list-custom/releases/latest/download/geosite.datload/geosite.dat
+curl -o /var/mosdns/geosite.dat https://gh-proxy.com///https://github.com/Loyalsoldier/domain-list-custom/releases/latest/download/geosite.dat
 # 下载 private.dat 文件
 #curl -o /var/mosdns/geo_private.dat https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/private.dat
 # 下载gfw.txt
