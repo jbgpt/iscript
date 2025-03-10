@@ -1,10 +1,10 @@
 # mosdns v5 配置文件 
 data_providers:
   - tag: geoip 
-    file: "./geoip.dat"
+    file: "/var/mosdns/geoip.dat"
     auto_reload: true 
   - tag: geosite 
-    file: "./geosite.dat"
+    file: "/var/mosdns/geosite.dat"
     auto_reload: true 
 
 plugins:
@@ -31,7 +31,7 @@ plugins:
     type: query_log 
     args:
       log_level: info 
-      file: "./query.log"
+      file: "/var/mosdns/query.log"
 
   # 主分流逻辑 
   - tag: main_route 
