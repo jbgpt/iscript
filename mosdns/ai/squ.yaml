@@ -1,0 +1,106 @@
+# mosdns v5 配置文件 
+data_providers:
+  - tag: geoip 
+    file: "/var/mosdns/geoip.dat"
+    auto_reload: true 
+  - tag: geosite 
+    file: "/var/mosdns/geosite.dat"
+    auto_reload: true 
+
+plugins:
+  # 缓存设置（1小时）
+  - tag: cache 
+    type: cache 
+    args:
+      size: 20000 
+      lazy_cache_ttl: 3600
+      cache_everything: true 
+
+  # 日志记录 
+  - tag: query_log 
+    type: query_log 
+    args:
+      log_level: info 
+      file: "/var/mosdns/query.log"
+
+  # 白名单处理（直连规则）
+  - tag: whitelist 
+    type: sequence 
+    args:
+      - matches:
+          - "geosite:private"  # 本地网络 
+          - "geosite:cn"  # 中国域名 
+          - "geosite:network-operator"  # 运营商域名 
+        exec: $domestic_dns 
+
+  # 主分流逻辑 
+  - tag: main_route 
+    type: sequence 
+    args:
+      # 白名单直连 
+      - exec: $whitelist 
+      - matches: !response_has_local_ip 
+        exec: jump after_whitelist 
+      - exec: accept 
+
+      # 广告拦截 
+      - tag: after_whitelist 
+        matches:
+          - "geosite:category-ads-all"
+        exec: reject 
+
+      # 国内域名处理 
+      - matches:
+          - "geosite:cn"
+          - "geosite:apple-cn"
+        exec: $domestic_dns 
+
+      # GFW列表处理 
+      - matches:
+          - "geosite:gfw"
+          - "geosite:geolocation-!cn"
+        exec: $proxy_dns 
+
+      # 灰名单处理（污染域名）
+      - matches:
+          - "geosite:tld-!cn"
+        exec: $trusted_dns 
+
+  # 基础组件 
+  - tag: main_sequence 
+    type: sequence 
+    args:
+      - exec: $$$query_log 
+      - exec: $$cache 
+      - matches: has_resp
+        exec: jump has_valid_response 
+      - exec: $main_route 
+
+  # DNS服务器组
+  - tag: domestic_dns 
+    type: fast_forward 
+    args:
+      upstream:
+        - addr: "udp://223.5.5.5:53"  # 阿里DNS 
+        - addr: "udp://119.29.29.29:53"  # DNSPod 
+
+  - tag: trusted_dns 
+    type: forward 
+    args:
+      upstreams:
+        - addr: "tls://1.1.1.1:853"  # Cloudflare DNS-over-TLS 
+        - addr: "https://dns.google/dns-query"  # Google DoH
+
+  - tag: proxy_dns 
+    type: forward 
+    args:
+      upstreams:
+        - addr: "tcp://127.0.0.1:7913"  # SSR Plus代理端口 
+
+servers:
+  - exec: main_sequence 
+    listeners:
+      - protocol: udp
+        addr: ":53"
+      - protocol: tcp 
+        addr: ":53"
