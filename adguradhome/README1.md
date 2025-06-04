@@ -1,3 +1,7 @@
+###初次访问会要求初始设置：
+
+##网页管理端口设为3000，DNS监听端口设为3001。（端口号任意，不冲突即可。）
+
 1.上游DNS服务器显得尤为重要，在这里我推荐几个我使用比较多的DNS服务器：
 #https://dns10.quad9.net/dns-query	# AdGuard Home官方维护
 #https://dns.google/dns-query	# Google DoH服务器
