@@ -1,5 +1,12 @@
 # OpenWRT (mipsel 架构) 安装与标准配置 AdGuardHome 图文教程
-
+## 手动更新core
+/etc/init.d/adguardhome stop
+cd /tmp
+wget https://github.com/AdguardTeam/AdGuardHome/releases/latest/download/AdGuardHome_linux_mipsle.tar.gz
+tar -zxvf AdGuardHome_linux_mipsle.tar.gz
+cp AdGuardHome/AdGuardHome /usr/bin/adguardhome
+chmod +x /usr/bin/adguardhome
+/etc/init.d/adguardhome start
 > 本教程适用于基于 mipsel 架构的 OpenWRT 路由器，带你一步步完成 AdGuardHome 的下载、安装、初始化配置与优化设置。
 
 ---
