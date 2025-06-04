@@ -15,15 +15,23 @@
 2.DNS 黑名单
 AdGuard Home的DNS 黑名单是整个的核心，它决定了最终对抗广告和追踪器的质量，在这里我推荐一个效果比较好，误伤比较小的DNS黑名单，以下加速链接为CDN加速后的链接：
 AdGuard DNS filter：原始链接 | 加速链接
+https://mirror.ghproxy.com/https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
 AdAway Default Blocklist：原始链接 | 加速链接
+https://mirror.ghproxy.com/https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/AdGuard_DNS_filter.txt
 AdGuard Base filter：原始链接 | 加速链接
+https://link.juejin.cn/?target=https%3A%2F%2Fmirror.ghproxy.com%2Fhttps%3A%2F%2Fraw.githubusercontent.com%2F217heidai%2Fadblockfilters%2Fmain%2Frules%2FAdGuard_Base_filter.txt
 AdGuard Chinese filter：原始链接 | 加速链接
+https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/AdGuard_Chinese_filter.txt
 CJX's Annoyance List：原始链接 | 加速链接
 乘风MV：原始链接 |  加速链接
+(https://raw.githubusercontent.com/xinggsf/Adblock-Plus-Rule/master/mv.txt)
 乘风Rules：原始链接 | 加速链接
+https://raw.githubusercontent.com/xinggsf/Adblock-Plus-Rule/master/rule.txt
+
 jiekouAD： 原始链接 | 加速链接
 EasyList：原始链接 | 加速链接
 EasyList China：原始链接 | 加速链接
+https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/EasyList_China.txt
 EasyPrivacy：原始链接 | 加速链接
 BlueSkyXN：原始链接 | 加速链接
 
