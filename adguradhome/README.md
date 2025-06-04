@@ -16,6 +16,7 @@ AdGuardHome_linux_amd64.tar.gz
 或着直接连接路由，执行sh /usr/share/AdGuardHome/update_core.sh
 --------
 4.chmod 755 /etc/init.d/AdGuardHome service AdGuardHome restart
-b.1,下载架构tar.gz包，解压adguardhome文件到/usr/bin/adguardhome,
-2.chmod 755 /usr/bin/adguardhome/adguardhome 
+
+###此方法安装的版本非最新版，如需更新最新版，可以前往 AdGuardHome Releases 下载最新的版本，通过SSH软件，将下载的 AdGuardHome 程序文件上传覆盖 /usr/bin/AdGuardHome 文件，并通过 chmod +x /usr/bin/AdGuardHome 赋予权限。
+##2.chmod 755 /usr/bin/adguardhome/adguardhome 
 
