@@ -15,4 +15,4 @@ AdGuardHome_linux_amd64.tar.gz
 3.然后再从WEBUI界面点更新，就能正常更新了
 或着直接连接路由，执行sh /usr/share/AdGuardHome/update_core.sh
 --------
-以上方法绝对管用。我最近刚好需要更新。才弄的
+4.chmod 755 /etc/init.d/AdGuardHome service AdGuardHome restart
