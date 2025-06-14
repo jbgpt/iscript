@@ -12,6 +12,7 @@
 ---
 
 ## 一、准备工作
+### https://gcore.jsdelivr.net/gh/217heidai/adblockfilters@main/rules/adblockdns.txt
 
 - 已刷写 OpenWRT（适配 mipsel 架构）。
 - 路由器可正常联网。
