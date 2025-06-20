@@ -67,7 +67,7 @@ configure_wireless() {
         uci set wireless.default_radio0.encryption='sae-mixed'
         uci set wireless.default_radio0.key="$wlan_password"
         uci set wireless.radio0.country='CN'
-        uci set wireless.radio0.distance='1000'
+       # uci set wireless.radio0.distance='1000'
         uci set wireless.radio0.frag_threshold='2346'
         uci set wireless.radio0.rts_threshold='2347'
         uci set wireless.default_radio0.disassoc_low_ack='0'
