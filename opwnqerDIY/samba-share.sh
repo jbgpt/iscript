@@ -138,8 +138,50 @@ uci commit uhttpd
 
 # 9. 换源
 [ -f /etc/opkg/distfeeds.conf ] && sed -i 's_https\?://downloads.openwrt.org_https://mirrors.tuna.tsinghua.edu.cn/openwrt_g' /etc/opkg/distfeeds.conf
+# 10. 启用挂载点自动挂载（自动挂载未知设备，挂载到/mnt/sda*）
+# luci-app-mountd/automount配置
+uci set fstab.@global[0].auto_mount='1'
+uci set fstab.@global[0].auto_swap='1'
 
-# 10. Samba 配置（添加用户并共享U盘）
+# 启用挂载点luci界面中的“自动挂载未知设备”
+uci set luci.main.automount='1'
+
+# 针对所有U盘插入自动挂载到/mnt/sda*，利用hotplug机制
+usb_hotplug_script="/etc/hotplug.d/block/99-auto-mount-sda"
+if [ ! -f $usb_hotplug_script ]; then
+  mkdir -p /etc/hotplug.d/block
+  cat << 'EOF' > $usb_hotplug_script
+#!/bin/sh
+# 自动挂载U盘到/mnt/sda*，移除时卸载
+DEVNAME="/dev/${DEVNAME##*/}"
+MOUNT_BASE="/mnt"
+
+# 只处理U盘，忽略rom、mtdblock等
+if echo "$DEVNAME" | grep -Eq "^/dev/sd[a-z][0-9]*$"; then
+    MOUNT_POINT="$MOUNT_BASE/$(basename $DEVNAME)"
+    if [ "$ACTION" = "add" ]; then
+        [ ! -d "$MOUNT_POINT" ] && mkdir -p "$MOUNT_POINT"
+        # 已挂载则跳过
+        mount | grep -q "on $MOUNT_POINT " || {
+            # 支持vfat, ntfs, exfat, ext4等主流格式
+            for fstype in vfat ntfs exfat ext4; do
+                mount -t $fstype "$DEVNAME" "$MOUNT_POINT" 2>/dev/null && break
+            done
+        }
+    elif [ "$ACTION" = "remove" ]; then
+        umount "$MOUNT_POINT" 2>/dev/null
+        rmdir "$MOUNT_POINT" 2>/dev/null
+    fi
+fi
+exit 0
+EOF
+  chmod +x $usb_hotplug_script
+fi
+
+/etc/init.d/fstab enable
+/etc/init.d/fstab restart
+
+# 10.1 Samba 配置（添加用户并共享U盘）
 #oot_password="root"
 
 # 添加 root samba 用户
