@@ -129,6 +129,22 @@ uci set firewall.@rule[-1].src='wan'
 uci set firewall.@rule[-1].dest='lan'
 uci set firewall.@rule[-1].dest_port='22 8006 8069 9090 18080 18443'
 uci set firewall.@rule[-1].target='ACCEPT'
+# 仅允许内网访问SMB（Samba）服务，禁止WAN等非LAN访问
+uci -q add firewall rule
+uci set firewall.@rule[-1].name='Allow-LAN-Samba'
+uci set firewall.@rule[-1].src='lan'
+uci set firewall.@rule[-1].dest_port='137 138 139 445'
+uci set firewall.@rule[-1].proto='tcp udp'
+uci set firewall.@rule[-1].target='ACCEPT'
+
+uci -q add firewall rule
+uci set firewall.@rule[-1].name='Deny-WAN-Samba'
+uci set firewall.@rule[-1].src='wan'
+uci set firewall.@rule[-1].dest_port='137 138 139 445'
+uci set firewall.@rule[-1].proto='tcp udp'
+uci set firewall.@rule[-1].target='REJECT'
+
+
 uci commit firewall
 
 # 8. uhttpd 监听端口
