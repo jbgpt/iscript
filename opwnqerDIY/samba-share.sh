@@ -8,15 +8,14 @@ wlan_name1="openwrt_5G"
 wlan_password="aa12345678"
 root_password="root"
 lan_ip_address="192.168.2.1"
-hostname="openwrt-wifi"
+hostname="openwrt-samba"
 log_file="/tmp/uci-defaults-hc5962.log"
 
 exec >"$log_file" 2>&1
 
 # 1. 设置 root 密码
 if [ -n "$root_password" ]; then
-  pw_hash=$(mkpasswd -m sha-256 "$root_password" 2>/dev/null)
-  [ -n "$pw_hash" ] && sed -i "s|^root:[^:]*:|root:${pw_hash}:|" /etc/shadow
+  (echo "$root_password"; sleep 1; echo "$root_password") | passwd > /dev/null
 fi
 
 # 2. 配置 LAN
