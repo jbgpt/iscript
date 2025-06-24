@@ -206,6 +206,7 @@ if echo "$DEVNAME" | grep -Eq "^/dev/sd[a-z][0-9]*$"; then
                 uci set samba4.@share[-1].users='root'
                 uci set samba4.@share[-1].comment='Ushare'
                 uci set samba4.@share[-1].browseable='yes'
+                uci set samba4.@share[-1].hosts_allow='192.168.2.0/24'
                 uci commit samba4
                 /etc/init.d/samba4 reload
             fi
